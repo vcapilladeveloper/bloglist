@@ -12,7 +12,24 @@ const totalLikes = (blogs) => {
     return sumWithInitial
 }
 
+const indexOfMaxLikes = (blogs) => {
+    const likes = blogs.map(blog => blog.likes)
+    if (likes.length === 0) {
+        return -1
+      }
+    
+      return likes.reduce((maxIndex, currentValue, currentIndex) => {
+        return currentValue > blogs[maxIndex] ? currentIndex : maxIndex
+      }, 0)
+}
+
+const favoriteBlog = (blogs) => {
+    const blog = blogs[indexOfMaxLikes(blogs)]
+   return {title: blog.title, author: blog.author, likes: blog.likes}
+}
+
 module.exports = {
     dummy,
-    totalLikes
+    totalLikes,
+    favoriteBlog
 }

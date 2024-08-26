@@ -115,7 +115,24 @@ describe('POST /', () => {
 
     const contents = blogsAtEnd.map(blog => blog.url)
     assert(contents.includes(newBlog.url))
-    
+  })
+
+  test('Check newBlog with no likes set it to 0', async () => {
+    const newBlog = {
+      title: 'UI tests for iOS',
+      author: 'Victor Capilla',
+      url: 'https://medium.com/@victorcapilladeveloper/ui-tests-for-ios-apps-basics-df672f53447d',
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-type', /application\/json/)
+
+    const blogsAtEnd = await listHelper.listInDb()
+    const contents = blogsAtEnd.findIndex(blog => blog.url === newBlog.url)
+    assert.strictEqual(blogsAtEnd[contents].likes, 0)
   })
 })
 

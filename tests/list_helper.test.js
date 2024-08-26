@@ -105,10 +105,10 @@ describe('POST /', () => {
     }
 
     await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-type', /application\/json/)
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-type', /application\/json/)
 
     const blogsAtEnd = await listHelper.listInDb()
     assert.strictEqual(blogsAtEnd.length, listHelper.listWithMultipleBlog.length + 1)
@@ -125,10 +125,10 @@ describe('POST /', () => {
     }
 
     await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-type', /application\/json/)
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-type', /application\/json/)
 
     const blogsAtEnd = await listHelper.listInDb()
     const contents = blogsAtEnd.findIndex(blog => blog.url === newBlog.url)
@@ -143,9 +143,9 @@ describe('POST /', () => {
     }
 
     await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
   })
 
   test('No title returns error', async () => {
@@ -156,14 +156,14 @@ describe('POST /', () => {
     }
 
     await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
   })
 })
 
 describe('DELETE /:id', () => {
-  test( 'Remove Blog by ID', async () => {
+  test('Remove Blog by ID', async () => {
     const blogsAtStart = await listHelper.listInDb()
     const blogToDelete = blogsAtStart[0]
 
@@ -176,6 +176,25 @@ describe('DELETE /:id', () => {
     assert(!contents.includes(blogToDelete.url))
 
     assert.strictEqual(blogsAtEnd.length, listHelper.listWithMultipleBlog.length - 1)
+  })
+})
+
+describe('PUT /:id', () => {
+  test('Update Likes', async () => {
+    const blogsAtStart = await listHelper.listInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const updatedLikes = {
+      likes: 100
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedLikes)
+      .expect(204)
+
+      const blogsAtEnd = await listHelper.listInDb()
+      const content = blogsAtEnd.findIndex(blog => blog.url === blogToUpdate.url)
+      assert.strictEqual(blogsAtEnd[content].likes, 100)
   })
 })
 

@@ -162,6 +162,23 @@ describe('POST /', () => {
   })
 })
 
+describe('DELETE /:id', () => {
+  test( 'Remove Blog by ID', async () => {
+    const blogsAtStart = await listHelper.listInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await listHelper.listInDb()
+    const contents = blogsAtEnd.map(blog => blog.url)
+    assert(!contents.includes(blogToDelete.url))
+
+    assert.strictEqual(blogsAtEnd.length, listHelper.listWithMultipleBlog.length - 1)
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

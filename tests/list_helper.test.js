@@ -134,6 +134,32 @@ describe('POST /', () => {
     const contents = blogsAtEnd.findIndex(blog => blog.url === newBlog.url)
     assert.strictEqual(blogsAtEnd[contents].likes, 0)
   })
+
+  test('No URL returns error', async () => {
+    const newBlog = {
+      title: 'UI tests for iOS',
+      author: 'Victor Capilla',
+      likes: 2,
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+  })
+
+  test('No title returns error', async () => {
+    const newBlog = {
+      author: 'Victor Capilla',
+      url: 'https://medium.com/@victorcapilladeveloper/ui-tests-for-ios-apps-basics-df672f53447d',
+      likes: 2,
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+  })
 })
 
 after(async () => {

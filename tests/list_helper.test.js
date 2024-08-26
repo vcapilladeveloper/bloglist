@@ -95,6 +95,30 @@ describe('GET /', () => {
   })
 })
 
+describe('POST /', () => {
+  test('Check newBlog is saved correctly', async () => {
+    const newBlog = {
+      title: 'UI tests for iOS',
+      author: 'Victor Capilla',
+      url: 'https://medium.com/@victorcapilladeveloper/ui-tests-for-ios-apps-basics-df672f53447d',
+      likes: 2,
+    }
+
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-type', /application\/json/)
+
+    const blogsAtEnd = await listHelper.listInDb()
+    assert.strictEqual(blogsAtEnd.length, listHelper.listWithMultipleBlog.length + 1)
+
+    const contents = blogsAtEnd.map(blog => blog.url)
+    assert(contents.includes(newBlog.url))
+    
+  })
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

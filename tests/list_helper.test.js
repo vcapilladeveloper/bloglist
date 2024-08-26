@@ -88,6 +88,11 @@ describe('GET /', () => {
     const response = await api.get('/api/blogs')
     assert.strictEqual(response.body.length, listHelper.listWithMultipleBlog.length)
   })
+
+  test('Id is named ID', async () => {
+    const response = await api.get('/api/blogs')
+    assert.ok(response.body[0].id)
+  })
 })
 
 after(async () => {
